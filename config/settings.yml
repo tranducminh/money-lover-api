@@ -1,0 +1,10 @@
+validations:
+  user:
+    email:
+      regex: !ruby/regexp /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+      max_length: 255
+    password:
+      min_length: 6
+    name:
+      max_length: 50
+      min_length: 1
