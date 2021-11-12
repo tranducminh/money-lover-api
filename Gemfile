@@ -28,6 +28,7 @@ gem 'rack-cors'
 gem 'devise'
 gem 'jwt'
 gem 'figaro'
+gem 'config'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
