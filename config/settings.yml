@@ -8,3 +8,7 @@ validations:
     name:
       max_length: 50
       min_length: 1
+  wallet:
+    name:
+      max_length: 50
+      min_length: 1

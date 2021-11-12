@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       post '/signup', to: "users#create"
 
       resources :wallets, only: [:index, :create, :show, :update, :destroy]
+
+      post '/wallets/:wallet_id/grant-access', to: "user_wallets#create"
+      delete '/wallets/:wallet_id/remove-access', to: "user_wallets#destroy"
     end  
   end
 end
