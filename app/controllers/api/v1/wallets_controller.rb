@@ -35,20 +35,16 @@ class Api::V1::WalletsController < ApplicationController
   end
 
   def update
-    if owner?
-      @wallet.update(update_params)
-      render :update, status: :ok
-    else
-      render_error :forbidden, "Not allow to update this wallet"
-    end
+    return render_error :forbidden, "Not allow to update this wallet" unless owner?
+
+    @wallet.update(update_params)
+    render :update, status: :ok
   end
 
   def destroy
-    if owner?
-      @wallet.destroy
-    else
-      render_error :forbidden, "Not allow to delete this wallet"
-    end
+    return render_error :forbidden, "Not allow to delete this wallet" unless owner?
+
+    @wallet.destroy
   end
 
   private

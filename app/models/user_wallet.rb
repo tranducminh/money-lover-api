@@ -1,4 +1,7 @@
 class UserWallet < ApplicationRecord
+  CREATE_PARAMS = %i(user_id wallet_id user_role).freeze
+  DESTROY_PARAMS = %i(user_id wallet_id).freeze
+
   belongs_to :user
   belongs_to :wallet
 
