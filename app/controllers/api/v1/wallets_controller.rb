@@ -12,31 +12,25 @@ class Api::V1::WalletsController < ApplicationController
   def create
     @wallet = Wallet.new(create_params)
 
-    if @wallet.save
-      UserWallet.create(
-        user_id: current_user.id,
-        wallet_id: @wallet.id,
-        user_role: User::roles[:OWNER]
-      )
-
-      render :create, status: :created
-    else
-      render_error :bad_request, "Create wallet failed"
+    @wallet.transaction do
+      @wallet.save
+      @wallet.user_wallets.create!(user_id: current_user.id, user_role: User::roles[:OWNER])
+      @wallet.categories.create!(Category::DEFAULT_CATEGORIES)
     end
   end
 
   def show
-    render_error :forbidden, "Not allow to access this wallet" unless accessible?
+    render_error :forbidden, "Not allow to access this wallet" unless accessible? @wallet.id
   end
 
   def update
-    return render_error :forbidden, "Not allow to update this wallet" unless owner?
+    return render_error :forbidden, "Not allow to update this wallet" unless owner? @wallet.id
 
     @wallet.update!(update_params)
   end
 
   def destroy
-    return render_error :forbidden, "Not allow to delete this wallet" unless owner?
+    return render_error :forbidden, "Not allow to delete this wallet" unless owner? @wallet.id
 
     @wallet.destroy
   end
@@ -55,13 +49,5 @@ class Api::V1::WalletsController < ApplicationController
     @wallet = Wallet.find_by(id: params[:id])
 
     render_error :not_found, "Wallet ##{params[:id]} not found" unless @wallet
-  end
-
-  def owner?
-    UserWallet.find_by(user_id: current_user.id, wallet_id: @wallet.id, user_role: User::roles[:OWNER])
-  end
-
-  def accessible?
-    UserWallet.find_by(user_id: current_user.id, wallet_id: @wallet.id)
   end
 end

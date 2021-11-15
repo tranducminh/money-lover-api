@@ -12,3 +12,7 @@ validations:
     name:
       max_length: 50
       min_length: 1
+  category:
+    name:
+      max_length: 50
+      min_length: 1

@@ -3,6 +3,7 @@ class Wallet < ApplicationRecord
   UPDATE_PARAMS = %i(name is_freezed).freeze
 
   has_many :user_wallets, dependent: :destroy
+  has_many :categories, dependent: :destroy
 
   validates :name, presence: true,
     length: {
