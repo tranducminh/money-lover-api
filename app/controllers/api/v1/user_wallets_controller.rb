@@ -3,6 +3,8 @@ class Api::V1::UserWalletsController < ApplicationController
   before_action :find_wallet
 
   def create
+    return render_error :bad_request, "Member is existed" if member_exist?
+
     case create_params[:user_role]
     when User::roles[:MANAGER]
       return render_error :forbidden, "Not allow to add manager" unless owner?
@@ -18,7 +20,7 @@ class Api::V1::UserWalletsController < ApplicationController
   end
 
   def destroy
-    return render_error :not_found, "Member is not exist" unless member_exist?
+    return render_error :not_found, "Member is not existed" unless member_exist?
 
     case @member_wallet.user_role
     when User::roles[:MANAGER]
@@ -37,9 +39,9 @@ class Api::V1::UserWalletsController < ApplicationController
   private
 
   def find_wallet
-    @wallet = Wallet.find_by(id: params[:id])
+    @wallet = Wallet.find_by(id: params[:wallet_id])
 
-    render_error :not_found, "Wallet ##{params[:id]} not found" unless @wallet
+    render_error :not_found, "Wallet ##{params[:wallet_id]} not found" unless @wallet
   end
 
   def member_exist?
@@ -63,12 +65,8 @@ class Api::V1::UserWalletsController < ApplicationController
   end
 
   def create_user_wallet
-    if member_exist? && @member_wallet.update_attributes user_role: create_params[:user_role]
-      return render :create, status: :created
-    end
-    
     @user_wallet = UserWallet.new(create_params)
     
-    return render :create, status: :created if @user_wallet.save
+    render :create, status: :created if @user_wallet.save
   end
 end

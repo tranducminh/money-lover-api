@@ -37,8 +37,7 @@ class Api::V1::WalletsController < ApplicationController
   def update
     return render_error :forbidden, "Not allow to update this wallet" unless owner?
 
-    @wallet.update(update_params)
-    render :update, status: :ok
+    @wallet.update!(update_params)
   end
 
   def destroy
