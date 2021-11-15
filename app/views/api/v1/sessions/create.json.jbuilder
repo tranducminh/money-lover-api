@@ -3,4 +3,3 @@ json.data do
   json.email @user.email
   json.name @user.name
 end
-json.success true

@@ -7,7 +7,6 @@ class Api::V1::WalletsController < ApplicationController
     current_user.user_wallets.each do |user_wallet|
       @wallets.push(user_wallet.wallet)
     end
-    render :index, status: :ok
   end
 
   def create
@@ -27,11 +26,7 @@ class Api::V1::WalletsController < ApplicationController
   end
 
   def show
-    if accessible?
-      render :show, status: :ok
-    else
-      render_error :forbidden, "Not allow to access this wallet"
-    end
+    render_error :forbidden, "Not allow to access this wallet" unless accessible?
   end
 
   def update

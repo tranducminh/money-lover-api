@@ -8,16 +8,14 @@ class Api::V1::SessionsController < ApplicationController
         jti: SecureRandom.uuid,
         exp: Time.now.to_i + ENV["token_expire_time"].to_i
       })
-      response.set_cookie(:token, token)
-      render :create, status: :ok
+      response.headers['Authorization'] = "Bearer #{token}"
     else
       render_error :unauthorized, "Email or password is incorrect"
     end
   end
 
   def destroy
-    response.set_cookie(:token, nil)
-    render :destroy, status: :ok
+    response.headers.delete('Authorization')
   end
 
   private

@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.errors.blank?
-      render :create, status: :ok
+      render :create, status: :created
     else
       render_error :bad_request, @user.errors.full_messages
     end
