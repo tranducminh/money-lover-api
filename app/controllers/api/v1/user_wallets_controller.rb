@@ -7,11 +7,11 @@ class Api::V1::UserWalletsController < ApplicationController
 
     case create_params[:user_role]
     when User::roles[:MANAGER]
-      return render_error :forbidden, "Not allow to add manager" unless owner?
+      return render_error :forbidden, "Not allow to add manager" unless owner? @wallet.id
 
       create_user_wallet
     when User::roles[:OBSERVER]
-      return render_error :forbidden, "Not allow to add observer" unless owner? || manager?
+      return render_error :forbidden, "Not allow to add observer" unless owner? @wallet.id || manager? @wallet.id
 
       create_user_wallet
     else
@@ -24,11 +24,11 @@ class Api::V1::UserWalletsController < ApplicationController
 
     case @member_wallet.user_role
     when User::roles[:MANAGER]
-      return render_error :forbidden, "Not allow to delete manager" unless owner?
+      return render_error :forbidden, "Not allow to delete manager" unless owner? @wallet.id
 
       @member_wallet.destroy
     when User::roles[:OBSERVER]
-      return render_error :forbidden, "Not allow to delete observer" unless owner? || manager?
+      return render_error :forbidden, "Not allow to delete observer" unless owner? @wallet.id || manager? @wallet.id
 
       @member_wallet.destroy
     else
@@ -46,14 +46,6 @@ class Api::V1::UserWalletsController < ApplicationController
 
   def member_exist?
     @member_wallet = UserWallet.find_by(user_id: params[:user_id], wallet_id: params[:wallet_id])
-  end
-
-  def owner?
-    UserWallet.find_by(user_id: current_user.id, wallet_id: @wallet.id, user_role: User::roles[:OWNER])
-  end
-
-  def manager?
-    UserWallet.find_by(user_id: current_user.id, wallet_id: @wallet.id, user_role: User::roles[:MANAGER])
   end
 
   def create_params

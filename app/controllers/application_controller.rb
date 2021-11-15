@@ -19,6 +19,22 @@ class ApplicationController < ActionController::API
     render 'api/error', status: status
   end
 
+  def owner? wallet_id
+    UserWallet.find_by(user_id: current_user.id, wallet_id: wallet_id, user_role: User::roles[:OWNER])
+  end
+
+  def manager? wallet_id
+    UserWallet.find_by(user_id: current_user.id, wallet_id: wallet_id, user_role: User::roles[:MANAGER])
+  end
+
+  def observer? wallet_id
+    UserWallet.find_by(user_id: current_user.id, wallet_id: wallet_id, user_role: User::roles[:OBSERVER])
+  end
+
+  def accessible? wallet_id
+    UserWallet.find_by(user_id: current_user.id, wallet_id: wallet_id)
+  end
+
   private
   def http_token
       @http_token = request.headers['Authorization'].split(' ').last if request.headers['Authorization'].present?

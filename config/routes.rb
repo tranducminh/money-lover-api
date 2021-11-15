@@ -8,10 +8,13 @@ Rails.application.routes.draw do
       post '/logout', to: "sessions#destroy"
       post '/signup', to: "users#create"
 
-      resources :wallets, only: [:index, :create, :show, :update, :destroy]
+      resources :wallets, only: [:index, :create, :show, :update, :destroy] do
+        resources :categories, only: [:index, :create, :show, :update]
 
-      post '/wallets/:wallet_id/grant-access', to: "user_wallets#create"
-      delete '/wallets/:wallet_id/remove-access', to: "user_wallets#destroy"
+        post '/grant-access', to: "user_wallets#create"
+        delete '/remove-access', to: "user_wallets#destroy"
+      end
+
     end  
   end
 end
