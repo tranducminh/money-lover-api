@@ -11,7 +11,7 @@ class Api::V1::UserWalletsController < ApplicationController
 
       create_user_wallet
     when User::roles[:OBSERVER]
-      return render_error :forbidden, "Not allow to add observer" unless owner? @wallet.id || manager? @wallet.id
+      return render_error :forbidden, "Not allow to add observer" unless owner?(@wallet.id) || manager?(@wallet.id)
 
       create_user_wallet
     else
@@ -28,7 +28,7 @@ class Api::V1::UserWalletsController < ApplicationController
 
       @member_wallet.destroy
     when User::roles[:OBSERVER]
-      return render_error :forbidden, "Not allow to delete observer" unless owner? @wallet.id || manager? @wallet.id
+      return render_error :forbidden, "Not allow to delete observer" unless owner?(@wallet.id) || manager?(@wallet.id)
 
       @member_wallet.destroy
     else

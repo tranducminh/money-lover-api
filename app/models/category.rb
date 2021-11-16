@@ -3,6 +3,7 @@ class Category < ApplicationRecord
 
   CREATE_PARAMS = %i(name main_type icon).freeze
   UPDATE_PARAMS = %i(name main_type icon).freeze
+  INCOME_TYPES = [Category::main_types[:INCOME], Category::main_types[:RECOVER_LOAN], Category::main_types[:DEBT]]
   DEFAULT_CATEGORIES = [
     { name: "Food", main_type: Category::main_types[:EXPENSE] },
     { name: "Restaurant", main_type: Category::main_types[:EXPENSE] },
@@ -34,6 +35,7 @@ class Category < ApplicationRecord
   ]
 
   belongs_to :wallet
+  has_many :transactions, dependent: :destroy
 
   validates :name, presence: true,
     length: {

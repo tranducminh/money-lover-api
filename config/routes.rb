@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
       resources :wallets, only: [:index, :create, :show, :update, :destroy] do
         resources :categories, only: [:index, :create, :show, :update]
+        resources :transactions, only: [:index, :create, :show, :update, :destroy]
 
         post '/grant-access', to: "user_wallets#create"
         delete '/remove-access', to: "user_wallets#destroy"

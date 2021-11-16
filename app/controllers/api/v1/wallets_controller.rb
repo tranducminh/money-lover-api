@@ -13,7 +13,7 @@ class Api::V1::WalletsController < ApplicationController
     @wallet = Wallet.new(create_params)
 
     @wallet.transaction do
-      @wallet.save
+      @wallet.save!
       @wallet.user_wallets.create!(user_id: current_user.id, user_role: User::roles[:OWNER])
       @wallet.categories.create!(Category::DEFAULT_CATEGORIES)
     end
