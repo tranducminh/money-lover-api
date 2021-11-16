@@ -16,6 +16,7 @@ Rails.application.routes.draw do
         delete '/remove-access', to: "user_wallets#destroy"
       end
 
+      resources :teams, only: [:create, :update, :destroy]
     end  
   end
 end
