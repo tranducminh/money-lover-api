@@ -5,6 +5,7 @@ class Wallet < ApplicationRecord
   has_many :user_wallets, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :transactions, dependent: :destroy
+  belongs_to :team
 
   validates :name, presence: true,
     length: {
