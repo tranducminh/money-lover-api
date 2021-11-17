@@ -1,0 +1,64 @@
+require "caxlsx"
+
+wb = xlsx_package.workbook
+wb.styles do |style|
+  # Styles
+  title_cell = style.add_style(b: true, sz: 20,
+    alignment: {horizontal: :center, vertical: :center})
+  border_cell = style.add_style(border: Axlsx::STYLE_THIN_BORDER)
+  header_cell = style.add_style(bg_color: "DEEAF6", border: Axlsx::STYLE_THIN_BORDER,
+    alignment: {vertical: :center})
+  part_cell = style.add_style(bg_color: "EEEEEE", b: true, sz: 14,
+    alignment: {vertical: :center})
+  detail_title_cell = style.add_style(bg_color: "EEEEEE", b: true, i:true, sz: 12,
+    alignment: {vertical: :center})
+
+  # Sheet
+  wb.add_worksheet(name: "Reports") do |sheet|
+    sheet.add_row [@report_title], style: title_cell
+    sheet.merge_cells "A1:D1"
+    sheet.add_row
+
+    sheet.add_row ["Overview"], style: part_cell
+    sheet.merge_cells "A3:D3"
+    sheet.add_row ["Transaction type", "Total"], style: header_cell
+    sheet.add_row ["Income", @income_total], style: border_cell
+    sheet.add_row ["Expense", @expense_total], style: border_cell
+    sheet.add_row ["Debt", @debt_total], style: border_cell
+    sheet.add_row ["Loan", @loan_total], style: border_cell
+    sheet.add_row ["Other", @other_total], style: border_cell
+    sheet.add_row
+
+    sheet.add_row ["Details"], style: part_cell
+    sheet.merge_cells "A11:D11"
+    if @income_transactions.length > 0
+      sheet.add_row ["Income transactions"], style: detail_title_cell
+      sheet.add_row ["Category", "Amount", "Date", "Note"], style: header_cell
+      @income_transactions.each do |transaction|
+        sheet.add_row [transaction.category.name, transaction.amount, transaction.date.to_s.split(" ").first, transaction.note], style: border_cell
+      end
+      sheet.add_row
+    end
+
+    if @expense_transactions.length > 0
+      sheet.add_row ["Expense transactions"], style: detail_title_cell
+      sheet.add_row ["Category", "Amount", "Date", "Note"], style: header_cell
+      @expense_transactions.each do |transaction|
+        sheet.add_row [transaction.category.name, transaction.amount, transaction.date.to_s.split(" ").first, transaction.note], style: border_cell
+      end
+      sheet.add_row
+    end
+
+    if @other_transactions.length > 0
+      sheet.add_row ["Other transactions"], style: detail_title_cell
+      sheet.add_row ["Category", "Amount", "Date", "Note"], style: header_cell
+      @other_transactions.each do |transaction|
+        sheet.add_row [transaction.category.name, transaction.amount, transaction.date.to_s.split(" ").first, transaction.note], style: border_cell
+      end
+    end
+
+    sheet.add_chart(Axlsx::Pie3DChart, :start_at => "G1", :end_at => "M1") do |chart|
+      chart.add_series :data => sheet["B5:B6"], :labels => sheet["A5:A6"], :title => sheet["A1"], :colors => ["00FF00", "0000FF"]
+    end
+  end
+end
