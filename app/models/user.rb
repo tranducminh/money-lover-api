@@ -5,6 +5,7 @@ class User < ApplicationRecord
   enum roles: [:OWNER, :MANAGER, :OBSERVER]
 
   has_many :user_wallets, dependent: :destroy
+  has_many :teams, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

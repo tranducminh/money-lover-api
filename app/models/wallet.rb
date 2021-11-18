@@ -1,10 +1,11 @@
 class Wallet < ApplicationRecord
-  CREATE_PARAMS = %i(name).freeze
-  UPDATE_PARAMS = %i(name is_freezed).freeze
+  CREATE_PARAMS = %i(name team_id).freeze
+  UPDATE_PARAMS = %i(name is_freezed team_id).freeze
 
   has_many :user_wallets, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :transactions, dependent: :destroy
+  belongs_to :team
 
   validates :name, presence: true,
     length: {

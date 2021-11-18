@@ -1,6 +1,11 @@
 class Api::V1::UsersController < ApplicationController
   def create
-    @user = User.create(user_params)
+    @user = User.new(user_params)
+
+    @user.transaction do
+      @user.save!
+      @user.teams.create!(name: "Personal")
+    end
 
     if @user.errors.blank?
       render :create, status: :created

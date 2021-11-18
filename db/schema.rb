@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_15_153559) do
+ActiveRecord::Schema.define(version: 2021_11_16_014945) do
 
   create_table "categories", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(version: 2021_11_15_153559) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "wallet_id"
     t.index ["wallet_id"], name: "index_categories_on_wallet_id"
+  end
+
+  create_table "teams", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_teams_on_user_id"
   end
 
   create_table "transactions", charset: "utf8mb4", force: :cascade do |t|
@@ -68,11 +76,15 @@ ActiveRecord::Schema.define(version: 2021_11_15_153559) do
     t.boolean "is_freezed", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "team_id"
+    t.index ["team_id"], name: "index_wallets_on_team_id"
   end
 
   add_foreign_key "categories", "wallets"
+  add_foreign_key "teams", "users"
   add_foreign_key "transactions", "categories"
   add_foreign_key "transactions", "wallets"
   add_foreign_key "user_wallets", "users"
   add_foreign_key "user_wallets", "wallets"
+  add_foreign_key "wallets", "teams"
 end
