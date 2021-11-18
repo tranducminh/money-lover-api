@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_08_072758) do
+ActiveRecord::Schema.define(version: 2021_11_10_173738) do
+
+  create_table "user_wallets", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "user_role", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.bigint "wallet_id"
+    t.index ["user_id"], name: "index_user_wallets_on_user_id"
+    t.index ["wallet_id"], name: "index_user_wallets_on_wallet_id"
+  end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -29,4 +39,14 @@ ActiveRecord::Schema.define(version: 2021_11_08_072758) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "wallets", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.integer "total", default: 0, null: false
+    t.boolean "is_freezed", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "user_wallets", "users"
+  add_foreign_key "user_wallets", "wallets"
 end
