@@ -3,10 +3,7 @@ class Api::V1::WalletsController < ApplicationController
   before_action :find_wallet, only: [:show, :update, :destroy]
 
   def index
-    @wallets = []
-    current_user.user_wallets.each do |user_wallet|
-      @wallets.push(user_wallet.wallet)
-    end
+    @user_wallets = current_user.user_wallets
   end
 
   def create

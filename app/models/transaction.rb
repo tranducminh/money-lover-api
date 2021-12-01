@@ -5,7 +5,7 @@ class Transaction < ApplicationRecord
   belongs_to :wallet
   belongs_to :category
 
-  validates :note, presence: true,
+  validates :note, allow_blank: true,
     length: { maximum: Settings.validations.transaction.note.max_length }
   validates :amount, presence: true,
     numericality: { 

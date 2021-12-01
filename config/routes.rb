@@ -7,17 +7,16 @@ Rails.application.routes.draw do
       post '/login', to: "sessions#create"
       post '/logout', to: "sessions#destroy"
       post '/signup', to: "users#create"
+      get '/me', to: "users#me"
 
       resources :wallets, only: [:index, :create, :show, :update, :destroy] do
         resources :categories, only: [:index, :create, :show, :update]
         resources :transactions, only: [:index, :create, :show, :update, :destroy]
         resources :reports, only: [:index]
-
-        post '/grant-access', to: "user_wallets#create"
-        delete '/remove-access', to: "user_wallets#destroy"
+        resources :user_wallets, only: [:index, :create, :destroy], path: :members
       end
 
-      resources :teams, only: [:create, :update, :destroy]
+      resources :teams, only: [:create, :update, :destroy, :index]
     end  
   end
 end

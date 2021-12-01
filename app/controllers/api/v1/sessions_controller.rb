@@ -8,7 +8,7 @@ class Api::V1::SessionsController < ApplicationController
         jti: SecureRandom.uuid,
         exp: Time.now.to_i + ENV["token_expire_time"].to_i
       })
-      response.headers['Authorization'] = "Bearer #{token}"
+      @token = response.headers['Authorization'] = "Bearer #{token}"
     else
       render_error :unauthorized, "Email or password is incorrect"
     end

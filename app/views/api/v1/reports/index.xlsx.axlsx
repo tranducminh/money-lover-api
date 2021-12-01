@@ -62,3 +62,5 @@ wb.styles do |style|
     end
   end
 end
+
+xlsx_package.serialize Rails.root.join("public", "#{@file_name}.xlsx")

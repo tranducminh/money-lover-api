@@ -3,9 +3,10 @@ class Api::V1::ReportsController < ApplicationController
   before_action :find_wallet
 
   def index
-    @report_title = "Wallet #{@wallet.name} - report for year #{params[:year]}"
+    @file_name = report_params[:name]
+    @report_title = "Wallet #{@wallet.name} - report for #{report_params[:year]}/#{report_params[:month]}"
     @transactions = @wallet.transactions
-        .where(date: DateTime.new(params[:year], 1, 1)..DateTime.new(params[:year], 12, 31))
+        .where(date: DateTime.new(report_params[:year].to_i, report_params[:month].to_i, 1)..DateTime.civil(report_params[:year].to_i, report_params[:month].to_i, -1))
         .order(date: :desc)
     @income_transactions= []
     @income_total = 0
@@ -45,5 +46,9 @@ class Api::V1::ReportsController < ApplicationController
     @wallet = Wallet.find(params[:wallet_id])
 
     render_error :not_found, "Wallet ##{params[:wallet_id]} not found" unless @wallet
+  end
+
+  def report_params
+    params.permit([:year, :month, :name])
   end
 end

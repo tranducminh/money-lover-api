@@ -6,7 +6,9 @@ class Api::V1::TransactionsController < ApplicationController
   def index
     return render_error :forbidden, "Not allow to get this transaction" unless accessible? @wallet.id
 
-    @transactions = @wallet.transactions.order(date: :desc)
+    @transactions = @wallet.transactions.where(
+      date: Date.new(params[:year].to_i, params[:month].to_i , 1)..Date.civil(params[:year].to_i, params[:month].to_i, -1)
+    ).order(date: :desc)
   end
 
   def show
@@ -20,7 +22,6 @@ class Api::V1::TransactionsController < ApplicationController
 
     @wallet.transaction do
       category = @wallet.categories.find(create_params[:category_id])
-
       @wallet.transactions.new(create_params)
       @wallet.total = @wallet.total + transfer_amount(category[:main_type], create_params[:amount])
       @wallet.save!

@@ -2,6 +2,10 @@ class Api::V1::TeamsController < ApplicationController
   before_action :authenticate_request!
   before_action :find_team, only: [:show, :update, :destroy]
 
+  def index
+    @teams = current_user.teams
+  end
+
   def create
     @team = current_user.teams.create!(create_params)
   end
